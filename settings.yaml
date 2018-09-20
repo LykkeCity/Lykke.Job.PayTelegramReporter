@@ -14,12 +14,16 @@ PayTelegramReporterJob:
         ProxySettings:
             Host: 
                 settings-key: Telegram-ProxySettings-Host
+                types: [ Optional ]
             Port: 
                 settings-key: Telegram-ProxySettings-Port
+                types: [ Optional ]
             Username: 
                 settings-key: Telegram-ProxySettings-Username
+                types: [ Optional ]
             Password: 
                 settings-key: Telegram-ProxySettings-Password
+                types: [ Optional ]
         Token: 
             settings-key: PayTelegramReporterJob-Telegram-Token
     PaymentRequestStatusReporter:

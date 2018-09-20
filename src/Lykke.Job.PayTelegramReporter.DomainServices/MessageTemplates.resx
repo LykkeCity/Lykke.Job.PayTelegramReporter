@@ -129,7 +129,7 @@ Paid amount is {2} {3}.</value>
   <data name="RefundRequired" xml:space="preserve">
     <value>Refund is required.
 Destination wallet is {0}.
-Source wallet is {1}.
+Source wallets are {1}.
 Paid amount is {2} {3}.</value>
   </data>
 </root>

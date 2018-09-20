@@ -1,14 +1,13 @@
 ﻿using Autofac;
-using Autofac.Extensions.DependencyInjection;
 using Common;
-using Common.Log;
+using Lykke.Job.PayTelegramReporter.Domain.Services;
+using Lykke.Job.PayTelegramReporter.DomainServices;
+using Lykke.Job.PayTelegramReporter.RabbitSubscribers;
 using Lykke.Job.PayTelegramReporter.Services;
 using Lykke.Job.PayTelegramReporter.Settings.JobSettings;
 using Lykke.Sdk;
 using Lykke.Sdk.Health;
-using Lykke.Job.PayTelegramReporter.RabbitSubscribers;
 using Lykke.SettingsReader;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Lykke.Job.PayTelegramReporter.Modules
 {
@@ -16,15 +15,11 @@ namespace Lykke.Job.PayTelegramReporter.Modules
     {
         private readonly PayTelegramReporterJobSettings _settings;
         private readonly IReloadingManager<PayTelegramReporterJobSettings> _settingsManager;
-        // NOTE: you can remove it if you don't need to use IServiceCollection extensions to register service specific dependencies
-        private readonly IServiceCollection _services;
 
         public JobModule(PayTelegramReporterJobSettings settings, IReloadingManager<PayTelegramReporterJobSettings> settingsManager)
         {
             _settings = settings;
             _settingsManager = settingsManager;
-
-            _services = new ServiceCollection();
         }
 
         protected override void Load(ContainerBuilder builder)
@@ -49,21 +44,36 @@ namespace Lykke.Job.PayTelegramReporter.Modules
                 .SingleInstance();
 
             RegisterRabbitMqSubscribers(builder);
-
-            // TODO: Add your dependencies here
-
-            builder.Populate(_services);
+            RegisterServices(builder);
         }
 
         private void RegisterRabbitMqSubscribers(ContainerBuilder builder)
         {
-            // TODO: You should register each subscriber in DI container as IStartable singleton and autoactivate it
-
-            builder.RegisterType<MyRabbitSubscriber>()
+            builder.RegisterType<PaymentRequestsSubscriber>()
                 .As<IStartable>()
+                .As<IStopable>()
+                .AutoActivate()
                 .SingleInstance()
-                .WithParameter("connectionString", _settings.Rabbit.ConnectionString)
-                .WithParameter("exchangeName", _settings.Rabbit.ExchangeName);
+                .WithParameter("settings", _settings.PaymentRequestsSubscriber);
+        }
+
+        private void RegisterServices(ContainerBuilder builder)
+        {
+            builder.RegisterType<TelegramService>()
+                .As<ITelegramSender>()
+                .As<IStartable>()
+                .As<IStopable>()
+                .AutoActivate()
+                .SingleInstance()
+                .WithParameter("settings", _settings.Telegram);
+
+            builder.RegisterType<PaymentRequestDetailsMessageFormatter>()
+                .As<IPaymentRequestDetailsMessageFormatter>();
+
+            builder.RegisterType<PaymentRequestStatusReporter>()
+                .As<IPaymentRequestStatusReporter>()
+                .SingleInstance()
+                .WithParameter("settings", _settings.PaymentRequestStatusReporter);
         }
     }
 }

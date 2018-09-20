@@ -1,0 +1,51 @@
+PayTelegramReporterJob:
+    Db:
+        LogsConnString:
+            settings-key: LykkePayLogsConnString
+            types: [ AzureTableStorage, Tag ]
+    PaymentRequestsSubscriber:
+        ConnectionString:
+            settings-key: RabbitPay
+            types: [ RabbitMq, Tag ]
+        ExchangeName:
+            settings-key: LykkePay-PaymentRequestsExchangeName
+            types: [ Tag ]
+    Telegram:
+        ProxySettings:
+            Host: 
+                settings-key: Telegram-ProxySettings-Host
+                types: [ Optional ]
+            Port: 
+                settings-key: Telegram-ProxySettings-Port
+                types: [ Optional ]
+            Username: 
+                settings-key: Telegram-ProxySettings-Username
+                types: [ Optional ]
+            Password: 
+                settings-key: Telegram-ProxySettings-Password
+                types: [ Optional ]
+        Token: 
+            settings-key: PayTelegramReporterJob-Telegram-Token
+    PaymentRequestStatusReporter:
+        ChatId:
+            settings-key: PayTelegramReporterJob-PaymentRequestStatusReporter-ChatId
+            types: [ Tag ]
+        MerchantIds: 
+            settings-key: PayTelegramReporterJob-PaymentRequestStatusReporter-MerchantIds
+            types: [ JsonArray, Tag ]
+        LykkeXHotWallet:
+            settings-key: PayTelegramReporterJob-PaymentRequestStatusReporter-LykkeXHotWallet
+            types: [ Tag ]
+            
+SlackNotifications:
+    AzureQueue:
+        ConnectionString:
+            settings-key: SlackNotificationsConnString
+            types: [ AzureTableStorage ]
+        QueueName:
+            settings-key: SlackQueueName
+            
+MonitoringServiceClient:
+    MonitoringServiceUrl:
+        settings-key: MonitoringServiceUrl
+        types: [ Tag ]

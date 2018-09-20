@@ -45,7 +45,8 @@ namespace Lykke.Job.PayTelegramReporter.DomainServices
             }
 
             if (message.Transactions?.Any(t =>
-                    t.SourceWalletAddresses?.Contains(_settings.LykkeXHotWallet, StringComparer.OrdinalIgnoreCase) ==
+                    t.SourceWalletAddresses?.Any(a=> 
+                        _settings.LykkeXHotWallets.Contains(a, StringComparer.OrdinalIgnoreCase)) ==
                     true) == true)
             {
                 return ReportPaymentCompletedAsync(message);

@@ -4,6 +4,6 @@
     {
         public string[] MerchantIds { get; set; }
 
-        public string LykkeXHotWallet { get; set; }
+        public string[] LykkeXHotWallets { get; set; }
     }
 }

@@ -33,7 +33,7 @@ PayTelegramReporterJob:
         MerchantIds: 
             settings-key: PayTelegramReporterJob-PaymentRequestStatusReporter-MerchantIds
             types: [ JsonArray, Tag ]
-        LykkeXHotWallet:
+        LykkeXHotWallets:
             settings-key: PayTelegramReporterJob-PaymentRequestStatusReporter-LykkeXHotWallets
             types: [ JsonArray, Tag ]
             

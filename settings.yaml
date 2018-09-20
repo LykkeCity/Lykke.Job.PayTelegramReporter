@@ -24,7 +24,7 @@ PayTelegramReporterJob:
             settings-key: PayTelegramReporterJob-PaymentRequestStatusReporter-MerchantIds
             types: [ JsonArray, Tag ]
         LykkeXHotWallet:
-            settings-key: PayTelegramReporterJob-PaymentRequestStatusReporter-LykkeXHotWallet
+            settings-key: PayTelegramReporterJob-PaymentRequestStatusReporter-LykkeXHotWallets
             types: [ Tag ]
             
 SlackNotifications:

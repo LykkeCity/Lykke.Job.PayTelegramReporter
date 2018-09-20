@@ -35,7 +35,7 @@ PayTelegramReporterJob:
             types: [ JsonArray, Tag ]
         LykkeXHotWallet:
             settings-key: PayTelegramReporterJob-PaymentRequestStatusReporter-LykkeXHotWallets
-            types: [ Tag ]
+            types: [ JsonArray, Tag ]
             
 SlackNotifications:
     AzureQueue:

@@ -11,19 +11,9 @@ PayTelegramReporterJob:
             settings-key: LykkePay-PaymentRequestsExchangeName
             types: [ Tag ]
     Telegram:
-        ProxySettings:
-            Host: 
-                settings-key: Telegram-ProxySettings-Host
-                types: [ Optional ]
-            Port: 
-                settings-key: Telegram-ProxySettings-Port
-                types: [ Optional ]
-            Username: 
-                settings-key: Telegram-ProxySettings-Username
-                types: [ Optional ]
-            Password: 
-                settings-key: Telegram-ProxySettings-Password
-                types: [ Optional ]
+        ProxySettings: 
+          settings-key: PayTelegramReporterJob-ProxySettings
+          types: [ Json, Tag ]
         Token: 
             settings-key: PayTelegramReporterJob-Telegram-Token
     PaymentRequestStatusReporter:

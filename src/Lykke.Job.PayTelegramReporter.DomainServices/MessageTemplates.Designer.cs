@@ -84,7 +84,7 @@ namespace Lykke.Job.PayTelegramReporter.DomainServices {
         /// <summary>
         ///   Looks up a localized string similar to Refund is required.
         ///Destination wallet is {0}.
-        ///Source wallet is {1}.
+        ///Source wallets are {1}.
         ///Paid amount is {2} {3}..
         /// </summary>
         internal static string RefundRequired {

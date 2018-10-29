@@ -6,6 +6,7 @@ using Lykke.Service.PayInternal.Contract.PaymentRequest;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Telegram.Bot.Types.Enums;
 
 namespace Lykke.Job.PayTelegramReporter.DomainServices
 {
@@ -31,42 +32,49 @@ namespace Lykke.Job.PayTelegramReporter.DomainServices
             switch (message.Status)
             {
                 case PaymentRequestStatus.Confirmed:
-                    return ReportConfirmedAsync(message);
+                    return ReportConfirmedAsync(message, false);
+                case PaymentRequestStatus.Error:
+                    switch (message.ProcessingError)
+                    {
+                        case PaymentRequestProcessingError.LatePaid:
+                        case PaymentRequestProcessingError.PaymentAmountBelow:
+                        case PaymentRequestProcessingError.PaymentAmountAbove:
+                            return ReportConfirmedAsync(message, true);
+                    }
+                    break;
             }
 
             return Task.CompletedTask;
         }
 
-        private Task ReportConfirmedAsync(PaymentRequestDetailsMessage message)
+        private Task ReportConfirmedAsync(PaymentRequestDetailsMessage message, bool isPaidWithError)
         {
-            if (!_settings.MerchantIds.Contains(message.MerchantId, StringComparer.OrdinalIgnoreCase))
-            {
-                return Task.CompletedTask;
-            }
+            bool isKycRequired = _settings.MerchantIds.Contains(message.MerchantId, StringComparer.OrdinalIgnoreCase);
 
-            if (message.Transactions?.Any(t =>
+            if (!isPaidWithError &&
+                message.Transactions?.Any(t =>
                     t.SourceWalletAddresses?.Any(a=> 
                         _settings.LykkeXHotWallets.Contains(a, StringComparer.OrdinalIgnoreCase)) ==
                     true) == true)
             {
-                return ReportPaymentCompletedAsync(message);
+                return ReportPaymentCompletedAsync(message, isKycRequired);
             }
-
-            return ReportRefundRequiredAsync(message);
+            
+            return ReportRefundRequiredAsync(message, isKycRequired);
         }
 
-        private Task ReportPaymentCompletedAsync(PaymentRequestDetailsMessage message)
+        private Task ReportPaymentCompletedAsync(PaymentRequestDetailsMessage message, bool isKycRequired)
         {
-            string text = _formatter.FormatPaymentCompleted(message);
+            string text = _formatter.FormatPaymentCompleted(message, isKycRequired);
             _log.Info(text, GetLogContext(message));
-            return _telegramSender.SendTextMessageAsync(_settings.ChatId, text);
+            return _telegramSender.SendTextMessageAsync(_settings.ChatId, text, ParseMode.Markdown);
         }
 
-        private Task ReportRefundRequiredAsync(PaymentRequestDetailsMessage message)
+        private Task ReportRefundRequiredAsync(PaymentRequestDetailsMessage message, bool isKycRequired)
         {
-            string text = _formatter.FormatRefundRequired(message);
+            string text = _formatter.FormatRefundRequired(message, isKycRequired);
             _log.Info(text, GetLogContext(message));
-            return _telegramSender.SendTextMessageAsync(_settings.ChatId, text);
+            return _telegramSender.SendTextMessageAsync(_settings.ChatId, text, ParseMode.Markdown);
         }
 
         private object GetLogContext(PaymentRequestDetailsMessage message)

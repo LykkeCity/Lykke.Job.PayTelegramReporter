@@ -7,18 +7,33 @@ namespace Lykke.Job.PayTelegramReporter.DomainServices
 {
     public class PaymentRequestDetailsMessageFormatter: IPaymentRequestDetailsMessageFormatter
     {
-        public string FormatPaymentCompleted(PaymentRequestDetailsMessage message)
+        public string FormatPaymentCompleted(PaymentRequestDetailsMessage message, bool isKycRequired)
         {
-            return string.Format(MessageTemplates.PaymentCompleted, message.WalletAddress,
-                GetSourceWalletAddressesText(message.Transactions), message.PaidAmount, 
-                message.PaymentAssetId);
+            return string.Format(
+                MessageTemplates.PaymentCompleted,
+                message.MerchantId,
+                isKycRequired ? MessageTemplates.KycRequiredText : string.Empty,
+                message.WalletAddress,
+                GetSourceWalletAddressesText(message.Transactions),
+                message.PaidAmount,
+                message.PaymentAssetId,
+                message.Id
+            );
         }
 
-        public string FormatRefundRequired(PaymentRequestDetailsMessage message)
+        public string FormatRefundRequired(PaymentRequestDetailsMessage message, bool isKycRequired)
         {
-            return string.Format(MessageTemplates.RefundRequired, message.WalletAddress,
-                GetSourceWalletAddressesText(message.Transactions), message.PaidAmount, 
-                message.PaymentAssetId);
+            return string.Format(
+                MessageTemplates.RefundRequired,
+                message.MerchantId,
+                string.Empty,
+                message.WalletAddress,
+                GetSourceWalletAddressesText(message.Transactions),
+                message.PaidAmount,
+                message.PaymentAssetId,
+                message.Order?.PaymentAmount,
+                message.Id
+            );
         }
 
         private string GetSourceWalletAddressesText(IEnumerable<PaymentRequestTransaction> transactions)

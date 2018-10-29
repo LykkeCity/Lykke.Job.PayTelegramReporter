@@ -70,10 +70,22 @@ namespace Lykke.Job.PayTelegramReporter.DomainServices {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Payment is completed.
-        ///Destination wallet is {0}.
-        ///Source wallets are {1}.
-        ///Paid amount is {2} {3}..
+        ///   Looks up a localized string similar to Notice: *KYC IS REQUIRED.*
+        ///.
+        /// </summary>
+        internal static string KycRequiredText {
+            get {
+                return ResourceManager.GetString("KycRequiredText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to *Payment is completed.*
+        ///Merchant: {0}.
+        ///{1}Destination wallet: {2}.
+        ///Source wallets: {3}.
+        ///Paid amount: {4} {5}.
+        ///PaymentRequestId: {6}..
         /// </summary>
         internal static string PaymentCompleted {
             get {
@@ -82,10 +94,12 @@ namespace Lykke.Job.PayTelegramReporter.DomainServices {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Refund is required.
-        ///Destination wallet is {0}.
-        ///Source wallets are {1}.
-        ///Paid amount is {2} {3}..
+        ///   Looks up a localized string similar to *Refund is required.*
+        ///Merchant: {0}.
+        ///{1}Destination wallet: {2}.
+        ///Source wallets: {3}.
+        ///Paid amount: {4} {5} (expected {6} {5}).
+        ///PaymentRequestId: {7}..
         /// </summary>
         internal static string RefundRequired {
             get {

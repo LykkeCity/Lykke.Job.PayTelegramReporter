@@ -4,7 +4,7 @@ namespace Lykke.Job.PayTelegramReporter.Domain.Services
 {
     public interface IPaymentRequestDetailsMessageFormatter
     {
-        string FormatPaymentCompleted(PaymentRequestDetailsMessage message);
-        string FormatRefundRequired(PaymentRequestDetailsMessage message);
+        string FormatPaymentCompleted(PaymentRequestDetailsMessage message, bool isKycRequired);
+        string FormatRefundRequired(PaymentRequestDetailsMessage message, bool isKycRequired);
     }
 }

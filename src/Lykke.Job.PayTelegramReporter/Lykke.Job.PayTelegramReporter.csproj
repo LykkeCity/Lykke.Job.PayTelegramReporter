@@ -30,7 +30,6 @@
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.1.1" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Lykke.Job.PayTelegramReporter.AzureRepositories\Lykke.Job.PayTelegramReporter.AzureRepositories.csproj" />
     <ProjectReference Include="..\Lykke.Job.PayTelegramReporter.Domain\Lykke.Job.PayTelegramReporter.Domain.csproj" />
     <ProjectReference Include="..\Lykke.Job.PayTelegramReporter.DomainServices\Lykke.Job.PayTelegramReporter.DomainServices.csproj" />
   </ItemGroup>

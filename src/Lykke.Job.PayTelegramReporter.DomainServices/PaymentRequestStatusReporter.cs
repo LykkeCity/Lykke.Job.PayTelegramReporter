@@ -67,7 +67,7 @@ namespace Lykke.Job.PayTelegramReporter.DomainServices
 
             if (!isPaidWithError)
             {
-                ReportPaymentCompletedAsync(message, isKycRequired);
+                return ReportPaymentCompletedAsync(message, isKycRequired);
             }
 
             return ReportRefundRequiredAsync(message, isKycRequired);

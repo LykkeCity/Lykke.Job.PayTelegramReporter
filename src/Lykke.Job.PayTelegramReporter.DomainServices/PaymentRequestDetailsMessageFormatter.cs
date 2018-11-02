@@ -26,7 +26,7 @@ namespace Lykke.Job.PayTelegramReporter.DomainServices
             return string.Format(
                 MessageTemplates.RefundRequired,
                 message.MerchantId,
-                string.Empty,
+                isKycRequired ? MessageTemplates.KycRequiredText : string.Empty,
                 message.WalletAddress,
                 GetSourceWalletAddressesText(message.Transactions),
                 message.PaidAmount,

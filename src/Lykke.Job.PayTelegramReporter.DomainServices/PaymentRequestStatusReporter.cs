@@ -51,15 +51,25 @@ namespace Lykke.Job.PayTelegramReporter.DomainServices
         {
             bool isKycRequired = _settings.MerchantIds.Contains(message.MerchantId, StringComparer.OrdinalIgnoreCase);
 
-            if (!isPaidWithError &&
-                message.Transactions?.Any(t =>
-                    t.SourceWalletAddresses?.Any(a=> 
-                        _settings.LykkeXHotWallets.Contains(a, StringComparer.OrdinalIgnoreCase)) ==
-                    true) == true)
+            if (isKycRequired)
             {
-                return ReportPaymentCompletedAsync(message, isKycRequired);
+                if (!isPaidWithError &&
+                    message.Transactions?.Any(t =>
+                        t.SourceWalletAddresses?.Any(a =>
+                            _settings.LykkeXHotWallets.Contains(a, StringComparer.OrdinalIgnoreCase)) ==
+                        true) == true)
+                {
+                    return ReportPaymentCompletedAsync(message, isKycRequired);
+                }
+                
+                return ReportRefundRequiredAsync(message, isKycRequired);
             }
-            
+
+            if (!isPaidWithError)
+            {
+                ReportPaymentCompletedAsync(message, isKycRequired);
+            }
+
             return ReportRefundRequiredAsync(message, isKycRequired);
         }
 
